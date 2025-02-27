@@ -224,169 +224,216 @@ impl RPNCalculator {
 }
 
 
-
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::RPNCalculator;
 
+    // Test für Addition
     #[test]
-    fn test_new_number() {
+    fn test_addition() {
+        // Erstelle einen neuen Rechner
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("42");
-        // Da nur eine Zahl auf dem Stack liegt, sollte get_result() Some(42.0) liefern.
-        assert_eq!(calc.get_result(), Some(42.0));
-    }
 
-    #[test]
-    fn test_arithmetical_addition() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("3");
-        calc.apply_operation("7");
-        calc.apply_operation("+");
-        assert_eq!(calc.get_result(), Some(10.0));
-    }
+        // Füge die Zahlen und die Addition-Operation hinzu
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("5"); // 5
+        calc.apply_operation("+"); // 3 + 5
 
-    #[test]
-    fn test_arithmetical_subtraction() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("10");
-        calc.apply_operation("4");
-        calc.apply_operation("-");
-        assert_eq!(calc.get_result(), Some(6.0));
-    }
-
-    #[test]
-    fn test_arithmetical_multiplication() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("5");
-        calc.apply_operation("6");
-        calc.apply_operation("*");
-        assert_eq!(calc.get_result(), Some(30.0));
-    }
-
-    #[test]
-    fn test_arithmetical_division() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("20");
-        calc.apply_operation("4");
-        calc.apply_operation("/");
-        assert_eq!(calc.get_result(), Some(5.0));
-    }
-
-    #[test]
-    fn test_arithmetical_exponentiation() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("2");
-        calc.apply_operation("5");
-        calc.apply_operation("^");
-        assert_eq!(calc.get_result(), Some(32.0));
-    }
-
-    #[test]
-    fn test_log_operation() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("1000");
-        calc.apply_operation("log");
-        // log10(1000) = 3
-        assert_eq!(calc.get_result(), Some(3.0));
-    }
-
-    #[test]
-    fn test_sqrt_operation() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("9");
-        calc.apply_operation("sqrt");
-        assert_eq!(calc.get_result(), Some(3.0));
-    }
-
-    #[test]
-    fn test_abs_operation() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("-8");
-        calc.apply_operation("abs");
+        // Überprüfe das Ergebnis: Erwartet ist 8
         assert_eq!(calc.get_result(), Some(8.0));
     }
 
+    // Test für Subtraktion
     #[test]
-    fn test_factorial_operation() {
+    fn test_subtraction() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("5");
-        calc.apply_operation("!");
-        // 5! = 120
-        assert_eq!(calc.get_result(), Some(120.0));
+
+        calc.apply_operation("7"); // 7
+        calc.apply_operation("4"); // 4
+        calc.apply_operation("-"); // 7 - 4
+
+        assert_eq!(calc.get_result(), Some(3.0)); // Erwartet: 3
     }
 
+    // Test für Multiplikation
     #[test]
-    fn test_factorial_zero() {
+    fn test_multiplication() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("0");
-        calc.apply_operation("!");
-        // 0! gilt hier als Produkt eines leeren Intervalls, was per Definition 1 ergibt.
-        assert_eq!(calc.get_result(), Some(1.0));
+
+        calc.apply_operation("6"); // 6
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("*"); // 6 * 2
+
+        assert_eq!(calc.get_result(), Some(12.0)); // Erwartet: 12
     }
 
+    // Test für Division
+    #[test]
+    fn test_division() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("10"); // 10
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("/"); // 10 / 2
+
+        assert_eq!(calc.get_result(), Some(5.0)); // Erwartet: 5
+    }
+
+    // Test für Exponentiation
+    #[test]
+    fn test_exponentiation() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("^"); // 2 ^ 3
+
+        assert_eq!(calc.get_result(), Some(8.0)); // Erwartet: 8
+    }
+
+    // Test für Quadratwurzel
+    #[test]
+    fn test_sqrt() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("9"); // 9
+        calc.apply_operation("sqrt"); // sqrt(9)
+
+        assert_eq!(calc.get_result(), Some(3.0)); // Erwartet: 3
+    }
+
+    // Test für Logarithmus
+    #[test]
+    fn test_log() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("100"); // 100
+        calc.apply_operation("log"); // log(100)
+
+        assert_eq!(calc.get_result(), Some(2.0)); // Erwartet: 2
+    }
+
+    // Test für Betrag
+    #[test]
+    fn test_abs() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("-5"); // -5
+        calc.apply_operation("abs"); // abs(-5)
+
+        assert_eq!(calc.get_result(), Some(5.0)); // Erwartet: 5
+    }
+
+    // Test für Fakultät
+    #[test]
+    fn test_factorial() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("5"); // 5
+        calc.apply_operation("!"); // 5!
+
+        assert_eq!(calc.get_result(), Some(120.0)); // Erwartet: 120
+    }
+
+    // Test für Addition über den gesamten Stack
     #[test]
     fn test_full_stack_addition() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("2");
-        calc.apply_operation("4");
-        calc.apply_operation("6");
-        calc.apply_operation("++");
-        // 2 + 4 + 6 = 12
-        assert_eq!(calc.get_result(), Some(12.0));
+
+        calc.apply_operation("1"); // 1
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("++"); // 1 + 2 + 3
+
+        assert_eq!(calc.get_result(), Some(6.0)); // Erwartet: 6
     }
 
+    // Test für Multiplikation über den gesamten Stack
     #[test]
     fn test_full_stack_multiplication() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("2");
-        calc.apply_operation("3");
-        calc.apply_operation("4");
-        calc.apply_operation("**");
-        // 2 * 3 * 4 = 24
-        assert_eq!(calc.get_result(), Some(24.0));
+
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("4"); // 4
+        calc.apply_operation("**"); // 2 * 3 * 4
+
+        assert_eq!(calc.get_result(), Some(24.0)); // Erwartet: 24
     }
 
-    #[test]
-    fn test_reconstruct_expression_infix() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("3");
-        calc.apply_operation("4");
-        calc.apply_operation("+");
-        // Da reconstruct_expression_infix die history_stack von hinten rekonstruiert,
-        // sollte das Ergebnis "(3 + 4)" sein.
-        let infix_expr = calc.clone().reconstruct_expression_infix();
-        assert_eq!(infix_expr, "(3 + 4)");
-    }
-
-    #[test]
-    fn test_reconstruct_expression_latex() {
-        let mut calc = RPNCalculator::new();
-        calc.apply_operation("5");
-        calc.apply_operation("2");
-        calc.apply_operation("/");
-        // Erwartetes LaTeX: "{\frac{5}{2}}"
-        let latex_expr = calc.clone().reconstruct_expression_latex();
-        assert_eq!(latex_expr, "{\\frac{5}{2}}");
-    }
-
+    // Test für ungültige Eingaben
     #[test]
     fn test_invalid_input() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("7");
-        // Ungültiger Token "foo": Es sollte eine Fehlermeldung ausgegeben und der Token wieder aus der history_stack entfernt werden.
-        calc.apply_operation("foo");
-        // Der Stack muss somit unverändert bleiben.
-        assert_eq!(calc.get_result(), Some(7.0));
+
+        calc.apply_operation("abc"); // ungültige Eingabe
+
+        // Die Eingabe wird nicht verarbeitet und der Stack bleibt unverändert
+        assert_eq!(calc.get_result(), None); // Kein Ergebnis
     }
 
+    // Test für Division durch Null
     #[test]
-    fn test_negative_numbers() {
+    fn test_division_by_zero() {
         let mut calc = RPNCalculator::new();
-        calc.apply_operation("-10");
-        calc.apply_operation("-5");
-        calc.apply_operation("+");
-        // -10 + (-5) = -15
-        assert_eq!(calc.get_result(), Some(-15.0));
+
+        calc.apply_operation("10"); // 10
+        calc.apply_operation("0"); // 0
+        calc.apply_operation("/"); // 10 / 0
+
+        // Sollte "inf" oder eine ähnliche Fehlerbehandlung erzeugen
+        assert_eq!(calc.get_result(), Some(f64::INFINITY)); // Erwartet: unendlich
+    }
+
+
+    // Test für Infix-Notation Rekonstruktion
+    #[test]
+    fn test_infix_reconstruction() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("5"); // 5
+        calc.apply_operation("+"); // 3 + 5
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("*"); // (3 + 5) * 2
+
+        let infix = calc.reconstruct_expression_infix();
+
+        // Erwartet: ((3 + 5) * 2)
+        assert_eq!(infix, "((3 + 5) * 2)");
+    }
+
+    // Test für LaTeX-Notation Rekonstruktion
+    #[test]
+    fn test_latex_reconstruction() {
+        let mut calc = RPNCalculator::new();
+
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("5"); // 5
+        calc.apply_operation("+"); // 3 + 5
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("*"); // (3 + 5) * 2
+
+        let latex = calc.reconstruct_expression_latex();
+
+        // Erwartet: {{3 + 5} \\cdot 2}
+        assert_eq!(latex, "{{3 + 5} \\cdot 2}");
+    }
+
+    // Test für komplexe Berechnungen
+    #[test]
+    fn test_simple_complex_calculation() {
+        let mut calc = RPNCalculator::new();
+
+        // Eingabe: 3 4 + 2 * 5 +
+        calc.apply_operation("3"); // 3
+        calc.apply_operation("4"); // 4
+        calc.apply_operation("+"); // 3 + 4 = 7
+        calc.apply_operation("2"); // 2
+        calc.apply_operation("*"); // 7 * 2 = 14
+        calc.apply_operation("5"); // 5
+        calc.apply_operation("+"); // 14 + 5 = 19
+
+        assert_eq!(calc.get_result(), Some(19.0)); // Erwartet: 19
     }
 }
